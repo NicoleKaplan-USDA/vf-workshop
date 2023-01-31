@@ -595,9 +595,11 @@ def Vence_Api(customer,dbuser,dbpassword,start_time,end_time):
     # concatenate strings to create a flexible filename
     filename = start_date_filename + "_" + end_date_filename + "_Vence-message-data" + ".csv"
 
-    os.path.join("drive/My Drive/Vence_API", filename)
+    path = os.path.join("drive/My Drive/Vence_API", filename)
     # print in the console to check the filename string
+
+    print(path)
 
     # TODO print a message with successful file out saying where the file has been saved
     # write out the data frame as a csv file using the flexible filename convention
-    fillna_combined_df.to_csv(filename, index=False)
+    fillna_combined_df.to_csv(path, index=False)
