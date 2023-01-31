@@ -595,8 +595,8 @@ def Vence_Api(customer,dbuser,dbpassword,start_time,end_time):
     # concatenate strings to create a flexible filename
     filename = start_date_filename + "_" + end_date_filename + "_Vence-message-data" + ".csv"
 
+    os.path.join("drive/My Drive/Vence_API", filename)
     # print in the console to check the filename string
-    print(filename)
 
     # TODO print a message with successful file out saying where the file has been saved
     # write out the data frame as a csv file using the flexible filename convention
