@@ -14,7 +14,7 @@ def Vence_Api(customer,dbuser,dbpassword,start_time,end_time):
     #api code written by andrew antaya, for questions contact aantaya@arizona.edu
     #API code adapted to jupyter notebook by Jameson Brennan
     #v2.1 comment out columns that have string 'GpsLocationExtIndicationCowHeading' as they no longer seem available
-    json_string = "" + '{' + '"'    + "customer" +'"'+  ":"+ '"'+customer+'"' +","+'"'    + "dbuser" +'"'+  ":"+ '"'+dbuser+'"' +","+'"'    + "dbpassword" +'"'+  ":"+ '"'+dbpassword+'"'+ ","+ '"'+"start_time"+'"'+  ":"+ '"'+start_time+'"'+ ","+ '"'+"end_time"+'"'+  ":"+ '"'+end_time+'"'+'}' 
+    json_string = "" + '{' + '"'    + "customer" +'"'+  ":"+ '"'+customer+'"' +","+'"'    + "dbuser" +'"'+  ":"+ '"'+dbuser+'"' +","+'"'    + "dbpassword" +'"'+  ":"+ '"'+dbpassword+'"'+ ","+ '"'+"start_time"+'"'+  ":"+ '"'+start_time+'"'+ ","+ '"'+"end_time"+'"'+  ":"+ '"'+end_time+'"'+'}'
     # store the URL of the API in a object
     url = "https://5rxy4xetnd.execute-api.us-west-2.amazonaws.com/production/messages"
 
@@ -74,16 +74,16 @@ def Vence_Api(customer,dbuser,dbpassword,start_time,end_time):
     print('optimal time window:' , trys[opt_time], 'hours')
 
     ##########################################################JRB end section added
-    
+
     time_delta = datetime.timedelta(days = 0.25) #JRB change line to opt_time from loop above line commented out
-    
-    
-    
+
+
+
 
     # initialize an empty list to store our list of dates to feed to the API
     dates_to_call = [json_start_date_datetime]
 
-    
+
 
     while(date < json_end_date_datetime):
         date = date + time_delta
@@ -587,7 +587,7 @@ def Vence_Api(customer,dbuser,dbpassword,start_time,end_time):
     end_date_filename = json_end_date_datetime.strftime("%Y-%m-%d")
 
     # concatenate strings to create a flexible filename
-    filename = "data/" + start_date_filename + "_" + end_date_filename + "_Vence-message-data" + ".csv"
+    filename = start_date_filename + "_" + end_date_filename + "_Vence-message-data" + ".csv"
 
     # check if the "data" directory exists,
     # if it does not, create new directory
@@ -606,7 +606,7 @@ def Vence_Api(customer,dbuser,dbpassword,start_time,end_time):
     return(all_data)
     # write out the data frame as a csv file using the flexible filename convention
     all_data.to_csv(filename)
- 
+
 import math
 #from utm.error import OutOfRangeError
 
@@ -861,7 +861,7 @@ def process_vf_data(df):
   df_na_coordinates=df[df.latitude.str.contains("NA") == True]
 #get unique collar id as last 4 characters in mac address
   df1['collar_id']= df1['collar'].str[-4:]
-  #create list of unique collars 
+  #create list of unique collars
   collars=df1.collar_id.unique()
   #collars
   #change working directory to google drive location
@@ -882,16 +882,16 @@ def process_vf_data(df):
       tf = TimezoneFinder()
 
       time_zone=[]
-      time_convert=[] 
+      time_convert=[]
       #loop through each lat long and get the local timezone for each point and make list of converted date/time
       for time_z in range(0,len(out_df)):
-          tz=tf.timezone_at(lng=out_df.longitude.iloc[time_z], lat=out_df.latitude.iloc[time_z]) 
+          tz=tf.timezone_at(lng=out_df.longitude.iloc[time_z], lat=out_df.latitude.iloc[time_z])
           my_date_time=out_df.date.iloc[time_z]
           convert_time= my_date_time.astimezone(pytz.timezone(tz)).strftime('%Y-%m-%d %H:%M:%S %Z%z')
           #   print (tz)
           time_zone.append(tz)
           time_convert.append(convert_time)
-  
+
       out_df['Time_Zone']=time_zone #create column for time zone
       out_df['date']=time_convert #convert to local
       out_df['date']=pd.to_datetime(out_df['date']) #convert to date
@@ -931,21 +931,21 @@ def process_vf_data(df):
               counts.append(ct[m])
           else:
               counts.append(ct[t])
-          count_sum.append(ct.sum()) 
+          count_sum.append(ct.sum())
 
 
       out_df['Count']=counts #create count column
       out_df['Sum']=count_sum #creat sum column
 
       #flag collars that have been stationary for a long period of time, indicates collar fell off
-      out_df['Flag'] = np.where( (out_df['Sum'] >= 800), 1,0) 
+      out_df['Flag'] = np.where( (out_df['Sum'] >= 800), 1,0)
       from itertools import groupby
       count_dups = [sum(1 for _ in group) for _, group in groupby(out_df['Flag'])]
       new=[]
       for p in range (0,len(count_dups)):
           a=np.repeat(count_dups[p], count_dups[p], axis=0)
           new.append(a)
-      count_vector=np.hstack(new) 
+      count_vector=np.hstack(new)
       out_df['Count_Flag']=count_vector
       out_df['Count_Flag'] = np.where(out_df['Flag'] == 0, 0, out_df['Count_Flag'])
       #at 576 this would be equivalent to 5 minute fix data not moving for 2 days
@@ -959,7 +959,7 @@ def process_vf_data(df):
 
 
       #calculate euclidean distance
-      out_df['Distance']= np.sqrt ((out_df['latitude_utm'].shift(1)-out_df['latitude_utm'])**2 + (out_df['longitude_utm'].shift(1) - out_df['longitude_utm'])**2) 
+      out_df['Distance']= np.sqrt ((out_df['latitude_utm'].shift(1)-out_df['latitude_utm'])**2 + (out_df['longitude_utm'].shift(1) - out_df['longitude_utm'])**2)
 
       out_df['Rate'] =out_df['Distance']/out_df['Duration']
       #remove points with rate of travel greater than 54m/min
@@ -967,12 +967,12 @@ def process_vf_data(df):
       #out_df=out_df[out_df.Rate<54]
 
       #re_calculate after dropping fixes
-      out_df['Distance']= np.sqrt ((out_df['latitude_utm'].shift(1)-out_df['latitude_utm'])**2 + (out_df['longitude_utm'].shift(1) - out_df['longitude_utm'])**2) 
+      out_df['Distance']= np.sqrt ((out_df['latitude_utm'].shift(1)-out_df['latitude_utm'])**2 + (out_df['longitude_utm'].shift(1) - out_df['longitude_utm'])**2)
       out_df ['Duration']=out_df ['date']-out_df ['date'].shift(1)
       out_df['Duration']=out_df['Duration']/np.timedelta64(1, 's')/60
       out_df['Rate'] =out_df['Distance']/out_df['Duration']
 
-      #conditions=[ 
+      #conditions=[
       #    (out_df['Rate'] <2.34),
       #    (out_df['Rate'] >=2.34)&(out_df['Rate'] <=25),
       #    (out_df['Rate'] >25)]
