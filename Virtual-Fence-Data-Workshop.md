@@ -1,20 +1,52 @@
 # Virtual Fence Data Workshop
 
+## Prerequisites
+
+A Google Account
+
 ## Setup
 
 1. Install R (we're using version 4.2.2)
 2. Install R Studio (we're using version 2022.12.0 Build 353)
-3. [Optional] Install Anaconda for Python
+3. Setup Google Collab and Google Drive
+4. [Optional] Install Anaconda for Python
 
 ## Important Links
 
 1. [Workshop Code](https://github.com/amantaya/vf-workshop)
 2. [HackMD (for live coding assistance)](https://hackmd.io/@yW3saP0JQS-tB5uNp9cJ-Q/Hk7YL6Uhs/edit)
-3. [API Code](https://github.com/amantaya/Vence-API)
+3. [Google Collab](https://github.com/amantaya/vf-workshop/blob/main/code/VF_In_Service_Vence_API.ipynb)
+4. [Virtual Fence Wrangling](https://github.com/Brandkmayer/VenceVFWrangling)
 
 ## Understanding Virtual Fence Message Data
 
 ## Accessing Virtual Fence Message Data with the API
+
+### A Very Brief Introduction to APIs
+
+Application Programming Interface (API)
+
+APIs allow you create, read, update, and delete data from another computer or server.
+
+In our specific case, we can only read data from a server. The API controls access to virtual fence data through authentication. We need to supply the API with a username and password to retrieve data.
+
+![Vence API Diagram](docs/attachments/Vence-API-Diagram.jpg)
+
+### Retrieving Virtual Fence Message Data Through the API
+
+We will be retrieving virtual fence message data by running a Python script to ask for messages over a range of dates.
+
+We have setup a Google Collab Notebook for this workshop [](https://colab.research.google.com/drive/1-xuWJO69oPPa1qjwgEN7kHENztKx4GxL?usp=sharing). Google Collab is a free service that runs Jupyter Notebooks (which are similar to R Markdown Notebooks) in the cloud. This means that you run Python in the cloud, not on your local computer. This has several advantages, including not tying up your computer's resources (CPU/Memory) to run a script, and in our case, you don't have to download packages/libraries to your local computer (making workshop setup much easier!).
+
+Open the Google Collab link, and sign into your Google account. You will be asked to permit this notebook to access your Google Drive.
+
+![Allow Access to Google Drive Prompt](docs/attachments/allow-access-to-google-drive.jpg)
+
+You will be prompted to grant permissioto access all files in your Google Drive. It's a best security practice to **do not  use a Google Drive that contains sensitive or personal data**, as this grants full access to all of the files in your Google Drive.
+
+![Permissions for Google Drive](docs/attachments/permission-for-google-drive.jpg)
+
+
 
 ## Managing Virtual Fence Message Data with a Database
 
