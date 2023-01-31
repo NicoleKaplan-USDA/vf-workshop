@@ -19,7 +19,7 @@ We recommend that you download this GitHub repository as a zip (compressed) fold
 
 1. [Workshop Code](https://github.com/amantaya/vf-workshop)
 2. [HackMD (for live coding assistance)](https://hackmd.io/@yW3saP0JQS-tB5uNp9cJ-Q/Hk7YL6Uhs/edit)
-3. [Google Collab](https://github.com/amantaya/vf-workshop/blob/main/code/VF_In_Service_Vence_API.ipynb)
+3. [Google Collab](https://colab.research.google.com/github/amantaya/vf-workshop/blob/main/code/VF_In_Service_Vence_API.ipynb)
 4. [Virtual Fence Wrangling](https://github.com/Brandkmayer/VenceVFWrangling)
 
 ## Understanding Virtual Fence Message Data
@@ -38,9 +38,9 @@ In our specific case, we can only read data from a server. The API controls acce
 
 We will be retrieving virtual fence message data by running a Python script to ask for messages over a range of dates.
 
-We have setup a Google Collab Notebook for this workshop [here](https://colab.research.google.com/drive/1-xuWJO69oPPa1qjwgEN7kHENztKx4GxL?usp=sharing). Google Collab is a free service that runs Jupyter Notebooks (which are similar to R Markdown Notebooks) in the cloud. This means that you run Python in the cloud, not on your local computer. This has several advantages, including not tying up your computer's resources (CPU/Memory) to run a script, and in our case, you don't have to download packages/libraries to your local computer (making workshop setup much easier!).
+We have setup a Google Collab Notebook for this workshop. Google Collab is a free service that runs Jupyter Notebooks (which are similar to R Markdown Notebooks) in the cloud. This means that you run Python in the cloud, not on your local computer. This has several advantages, including not tying up your computer's resources (CPU/Memory) to run a script, and in our case, you don't have to download packages/libraries to your local computer (making workshop setup much easier!).
 
-Open the [Google Collab](https://github.com/amantaya/vf-workshop/blob/main/code/VF_In_Service_Vence_API.ipynb) notebook, and sign into your Google account.
+Open the [Google Collab](https://colab.research.google.com/github/amantaya/vf-workshop/blob/main/code/VF_In_Service_Vence_API.ipynb) notebook, and sign into your Google account.
 
 You will be prompted to grant permission for the Google Collab notebook to access all files on your Google Drive.
 
