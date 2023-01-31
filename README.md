@@ -17,7 +17,7 @@ We recommend that you download this GitHub repository as a zip (compressed) fold
 
 ## Important Links
 
-1. [Workshop Code](https://github.com/amantaya/vf-workshop/code)
+1. [Workshop Code](https://github.com/amantaya/vf-workshop/tree/main/code)
 2. [HackMD (for live coding assistance)](https://hackmd.io/@yW3saP0JQS-tB5uNp9cJ-Q/Hk7YL6Uhs/edit)
 3. [Google Collab](https://colab.research.google.com/github/amantaya/vf-workshop/blob/main/code/VF_In_Service_Vence_API.ipynb)
 4. [Virtual Fence Wrangling](https://github.com/Brandkmayer/VenceVFWrangling)
