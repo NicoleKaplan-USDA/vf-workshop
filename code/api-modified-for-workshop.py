@@ -603,3 +603,5 @@ def Vence_Api(customer,dbuser,dbpassword,start_time,end_time):
     # TODO print a message with successful file out saying where the file has been saved
     # write out the data frame as a csv file using the flexible filename convention
     fillna_combined_df.to_csv(path, index=False)
+
+    return(fillna_combined_df)
