@@ -1,0 +1,573 @@
+---
+title: "Virtual Fence In Service"
+author: ""
+date: '2023-02-12'
+output:
+  html_document:
+    df_print: paged
+---
+
+## Turning Vence messages into data frames in R
+#### Jameson Brennan and Logan Vandermark
+#### Department of Animal Science, South Dakota State University
+
+The objectives of this hands on training are to: 1) introduce workshop participants to methods for streamlining Vence data processing tasks in R, and 2) demonstrate and provide examples of cleaning, merging, and extracting different animal behavior metrics from vence data. 
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>. When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. The example below will print a statement and run a quick computation. 
+
+```{r}
+#Quick R example
+print('VF Workshop Demo' )
+
+#Quick R Example
+apple=5
+orange=10
+apple+orange
+```
+
+
+## Import libraries
+
+Our first step to processing the data is to import the libraries we will use to run our analysis. Each library contains a set of functions which can be used to process data. For example, the function mean() would sum the values in a column and divide by the number of observations in the column. This code will look to see if the necessary packages are installed on your computer and if not install and load them.
+
+```{r, warning=FALSE ,message=FALSE,  class.source="bg-info"}
+
+
+##if there is an error and a package or dependency needs to be updated un-comment the code below and replace 'vctrs' with package
+#remove.packages('vctrs')
+#install.packages('vctrs')
+
+#Needed packages
+  list.of.packages <- c("ggplot2",'dplyr','knitr','markdown')
+  new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+  if(length(new.packages)) install.packages(new.packages)
+  library(ggplot2)
+  library(knitr)
+  library(markdown)
+
+```
+
+## Import Data
+
+The dataset used in this tutorial is a subset of data from the SDSU Cottonwood Field Station and represents 9 individual animals over 10 days (7/10/2021-7/20/2021). First we need to set the working directory to where the dataset is located.You can do this programatically or by clicking session -> set working directory -> choose directory. We will load in the dataset using the read.csv command and then view the data. If you are using your own datafile for this example you will need to change the file name in line 59. In addition, we will convert the date column to a date time formatand sort by date. The output will be the dimensions of the data (rows, columns) and column names.
+
+```{r,  class.source="bg-success" }
+#Set working directory
+#setwd("~/Conferences/SRM2023/In_Service_Data/example_datasets/Workshop_csv")
+
+#Load in the data file and view first 10 records
+vence_df=read.csv('bfde.csv',header=T)
+vence_df$X=NULL
+
+
+#Convert Date to date time
+vence_df$date=as.POSIXct(vence_df$date)
+
+#sort data by date time
+vence_df = vence_df[order(vence_df$date), ] 
+#get data dimensions
+dim(vence_df)
+#print column names
+colnames(vence_df)
+
+```
+
+## Cleaning Data Steps
+
+Next thing we want to do is start identifying potentially bad data. Though the google colab processing steps will delete any records with missing lat/long, occasionally the GPS device might still contain errors  outside the normal bounds of latitude or longitude.
+
+```{r,  class.source="bg-success" }
+
+#remove data outside normal lat/long
+vence_df=subset (vence_df,latitude < 90|latitude > -90)
+vence_df=subset (vence_df,longitude<180&longitude > -180 )
+
+```
+
+In addition, often times collars will fall off animals and still collect and report GPS fix data even though the collar is stationary. Within the google colab processing code, a column is created called 'Flag_Collar_Off'. This column is based on a moving window algorithm, that identifies the number of consecutive clusters of points within 30m of each other. More information can be found at the citation below.
+
+Brennan, J.R., Johnson, P., and Olson, K. 2021. Classifying Season Long Livestock Grazing Behavior with the use of a low-cost GPS and accelerometer. Computers and Electronics in Agriculture, 181. https://doi.org/10.1016/j.compag.2020.105957
+
+```{r,  class.source="bg-success" }
+
+ggplot(vence_df,aes(x=date,y=Sum,color=Flag_Collar_Off))+
+  geom_point()
+
+
+```
+
+As you can see from the plot the sum metric overtime shows daily variation in movement behavior. Notice that most of the higher points occur on the tic marks at the start of a new date (around midnight) indicating animals are stationary for a long period of time. The points that are flagged show a long period of time (>2 days) when all points are within 30m of each other, indicating the collar is stationary. This could indicate the collar has fallen off. We want to remove all data starting on the date the collar was flagged.
+
+```{r,  class.source="bg-success" }
+#create column with just date
+vence_df$Date=as.Date(vence_df$date)
+#if your dataset contains flags, remove data from the flag day on.
+flags=unique(vence_df$Flag_Collar_Off)
+if("Flag" %in% flags){
+  flag.first <- vence_df[match(unique(vence_df$Flag_Collar_Off), vence_df$Flag_Collar_Off),]
+  #remove all data after the date when the collar fell off
+  vence_df=subset(vence_df, Date< flag.first$Date[2] )
+}
+
+#plot data again to see if flags were removed
+ggplot(vence_df,aes(x=date,y=Sum,color=Flag_Collar_Off))+
+  geom_point()
+
+
+
+```
+
+
+
+## Recalculate duration, distance, and rate.
+
+Once the data cleaning process is complete, you should recalculate the duration, distance, and rate as some of the values may have changed. In the code below we are going to calculate distance traveled using the euclidean method based on the utm points which were created in the colab notebook.
+
+```{r,  class.source="bg-success" }
+#create dataframe of longitude and latitude utm points
+pts <- vence_df[c("longitude_utm" , "latitude_utm" )] 
+p1 = pts[-nrow(pts),]
+p2 = pts[-1,]
+#plug points into formula for euclidian distance (m), add in zero for first record
+vence_df$Distance=c(0, sqrt((p1$latitude_utm-p2$latitude_utm)^2 +(p1$longitude_utm-p2$longitude_utm)^2))
+
+
+#calculate difference in time between successive fixes
+time_diff = as.numeric(difftime(vence_df$date[1:(length(vence_df$date)-1)] , vence_df$date[2:length(vence_df$date)],units = c("min"))*-1)
+vence_df$Duration=c(0,time_diff) #add in duration column, notice first record is 0
+
+#calculate rate of travel
+vence_df$Rate=vence_df$Distance/vence_df$Duration #calculate rate
+
+
+```
+
+
+## Merge with Animal ID
+
+Often times we have other identifying information that we want to merge such as visual id tag, RFID, pasture, or treatment. This code will read in the animal id and match the information based on collar_id. As long as the collar_id column is the same name in both dataframes, you can merge whatever additional data you want. 
+
+```{r,  class.source="bg-success" }
+#read in animal id file
+animal_id=read.csv('Animal_ID.csv')
+#merge with vence data
+vence_df=merge(vence_df,animal_id,by='collar_id')
+
+```
+
+
+## Merge with Rotation Treatment
+
+Similarly, we may want to know what virtual fence rotation the animal was assigned for each time step. The code below will load in our metadata file on rotation with start and end dates. The code below will merge the dataset based on the column Pasture and evaluated whether the date is between the start and end of each rotation. 
+
+```{r,  class.source="bg-success" }
+#read in virtual fence rotations
+rotation_df=read.csv('Rotation_Information.csv')
+#convert start and end date
+rotation_df$Start=as.Date(rotation_df$Start,format = '%m/%d/%Y')
+rotation_df$End=as.Date(rotation_df$End,format = '%m/%d/%Y')
+#merge based on pasture (of note the pasture column was added in the step above)
+vence_df<- merge(vence_df, rotation_df, by = "Pasture")
+#evaluate if true or false for date time frame
+vence_df$Eval=ifelse(vence_df$Date>=vence_df$Start&vence_df$Date<=vence_df$End,T,F)
+#keep true
+vence_df=subset(vence_df,Eval==T)
+
+```
+
+## Estimate daily behavior from rate of travel
+
+Additional metrics of interest might be to classify behavior based on rate of travel. The code below will classify behavior based on a simple decision tree using the rate of travel we calculated earlier. A note of caution as the fix interval (5 minutes vs 30 minutes) might influence the classification and should be investigated for each unique case. For additional information see the below citations:
+
+Augustine DJ, Derner JD. 2013. Assessing herbivore foraging behavior with GPS collars in a semiarid grassland. Sensors 13(3):3711-23. doi: 10.3390/s130303711. 
+
+Nyamuryekung’e, S., A. F. Cibils, R. E. Estell, D. VanLeeuwen, C. Steele, O. R. Estrada, F. A. R. Almeida, A. L. González, and S. Spiegal. 2020. Do Young Calves Influence Movement Patterns of Nursing Raramuri Criollo Cows on Rangeland? Rangeland Ecology & Management 73(1):84-92. doi: https://doi.org/10.1016/j.rama.2019.08.015
+
+
+```{r,  class.source="bg-success" }
+#add in unique ID
+ID=unique(vence_df$collar_id)
+#add in decision tree to classify behavior
+vence_df$behavior <-ifelse(vence_df$Rate < 2.34 , "Resting",
+                          ifelse(vence_df$Rate >= 2.341 & vence_df$Rate <=25.0, "Grazing",
+                                "Walking"))
+#aggregate behavior by date
+behavior_df=aggregate(vence_df$Duration,by=list(vence_df$Date,vence_df$behavior),FUN=sum)
+colnames(behavior_df)=c('Date','Behavior','Minutes')
+behavior_df$collar_id=ID
+#get the first ten rows
+kable(head(behavior_df,n=10))
+
+
+
+```
+
+## Daily distance traveled
+
+Similar to above, we may be interested in calculating daily distance traveled for each animal. The code below will use the aggregate function to sum up the distance between successive fixes for each date. 
+
+
+```{r,  class.source="bg-success" }
+
+daily_distance_traveled=aggregate(vence_df$Distance,by=list(vence_df$Date),FUN=sum)
+colnames(daily_distance_traveled)=c("Date", "Distance_m")
+daily_distance_traveled$collar_id=ID
+kable(head(daily_distance_traveled))
+ggplot(daily_distance_traveled,aes(x=Date,y=Distance_m))+
+  geom_line()+
+  geom_point()+
+  ylab('Distance (m)\n')+
+  geom_vline(xintercept = as.Date('2021-07-15'),colour="blue", linetype = "longdash")+
+  ggtitle('Daily Distance Traveled, blue line represents new virtual rotation')
+
+```
+
+
+Looking at the plot one of the main things you notice is the low distance traveled on July 10th. We can use the aggregate function again to sum up the number of minutes for each day from the df_behavior dataset and convert it to hours. From the output below we see that July 10th only has 11.9 hours of data and was partially downloaded due to the date times specified in the API.
+
+```{r,  class.source="bg-success" }
+
+#check minutes in the day
+df_minutes=aggregate(behavior_df$Minutes,by=list(behavior_df$Date),FUN=sum)
+df_minutes$x= df_minutes$x/60
+colnames(df_minutes)=c('Date','Hours')
+kable(df_minutes)
+
+
+```
+
+## Calculate the number of dropped intervals
+
+Frequently with GPS enabled collars, fixes are sometimes dropped. This can be good to know how frequently fixes are lost and if there are any large time gaps is the dataset that may need closer attention. We can see from the example the average fix interval is 4.6 minutes. A total of 78 (or 5.5%) of fixes are greater that twice the average fix interval. 
+
+```{r,  class.source="bg-success" }
+#get average fix interval
+avg_fix_interval=round( mean(vence_df$Duration),digits=1)
+#get maximum fix intrval
+max_fix_interval=round( max(vence_df$Duration),digits=1)
+#get number of intervals greater than twice the total fixes and percent of total dropped
+df_fix_drop= subset(vence_df,Duration>avg_fix_interval*2)
+dropped_fixes=length(df_fix_drop$Duration)
+total_fixes=length(vence_df$Duration)
+percent_dropped=round( dropped_fixes/length(vence_df$Duration)*100,digits = 1)
+#turn into dataframe
+fix_interval_df=data.frame(avg_fix_interval,max_fix_interval,dropped_fixes,total_fixes,percent_dropped)
+colnames(fix_interval_df)=c("Average_Fix",'Max_Fix','Dropped_Fixes','Total_Fixes','Percent_Dropped')
+fix_interval_df$collar_id=ID
+kable( fix_interval_df)
+```
+
+
+## Sound and shock stimuli
+
+The next set of code will calculate from the messages the number of sound and shock that were issued each day as well as the percent of stimuli that were sound. 
+
+
+```{r,  class.source="bg-success" }
+
+#use if else statement in case none of the records have sound/shock region in the dataframe. Can happen when in an unmanaged state.
+if (length(unique(vence_df$trackingState))>1){
+  
+  #subset sound region points, calculate daily shock/sound
+  sound_df= subset(vence_df,trackingState=="SOUND_REGION")
+  sound=aggregate(sound_df$soundCount,by=list(sound_df$Date),FUN=sum)
+  colnames(sound)=c("Date",'Sound_Count')
+  shock=aggregate(sound_df$shockCount,by=list(sound_df$Date),FUN=sum)
+  colnames(shock)=c("Date",'Shock_Count')
+  sound_region=merge(sound,shock)
+  sound_region$Tracking_State='Sound_Region'
+  
+  #subset daily shock regions points, calculate daily shock/sound
+  shock_df=subset(vence_df,trackingState=="SHOCK_REGION")
+  sound=aggregate(shock_df$soundCount,by=list(shock_df$Date),FUN=sum)
+  colnames(sound)=c("Date",'Sound_Count')
+  shock=aggregate(shock_df$shockCount,by=list(shock_df$Date),FUN=sum)
+  colnames(shock)=c("Date",'Shock_Count')
+  shock_region=merge(sound,shock)
+  shock_region$Tracking_State='Shock_Region'
+  stimuli_df=rbind(sound_region,shock_region)
+  stimuli_df$Total=stimuli_df$Sound_Count+stimuli_df$Shock_Count
+  stimuli_df$Percent_Sound =stimuli_df$Sound_Count/stimuli_df$Total
+  
+}else{
+  #if there are no sound/shock regions then populate a blank dataset
+  stimuli_df=data.frame(NA,NA,NA,NA,NA,NA)
+  colnames(stimuli_df)=c( "Date" ,"Sound_Count" ,"Shock_Count","Tracking_State", "Total","Percent_Sound" )
+  
+}
+stimuli_df$collar_id=ID
+
+
+
+
+kable(stimuli_df)
+```
+
+
+
+## Applying processing steps to a list of files
+
+In this example, there are 9 total data files that need to be processed . You could run the processing steps above 9 times and then combine the results together. However, if this was a larger dataset, say with 100 animals, this would become a labor intensive process. To further automate the process, we will extract the names of all the files in the directory that match a pattern, in this case '.csv', and apply our code.The first step is to list all files in our working directory ending in .csv.
+
+
+```{r,  class.source="bg-success" }
+filenames=list.files(getwd(),pattern = ".csv",all.files = FALSE)
+filenames
+
+```
+
+We can see that the list included our Animal_ID and Rotation_Information files, which we don't want to process. The following code will remove those files returning only the virtual fence data files in the list. 
+
+```{r,  class.source="bg-success" }
+filenames=list.files(getwd(),pattern = ".csv",all.files = FALSE)
+filenames=filenames[! filenames =="Animal_ID.csv"]
+filenames=filenames[! filenames =="Rotation_Information.csv"]
+filenames
+```
+
+## Create emtpy sound/shock daily dataframe
+
+Next we will create a dataframe for the number of sound/shock events  for each animal in our list. First we will create an empty dataframe to append data.
+
+```{r,  class.source="bg-success" }
+
+stimuli_df_blank=data.frame()
+
+
+```
+
+## Loop through each data file 
+
+Next we will create a loop to loop through each data set, run though our intitial pre-processing steps, and then calculate the sound/shock data frame as above. The main difference in this code is the read.csv function takes the argument filenames[i] from our file name list and at the end we append our blank data frame with each individual animal.  
+
+
+```{r, class.source="bg-success"}
+
+for(i in 1:length(filenames)){
+  
+vence_df=read.csv(filenames[i],header=T)
+vence_df$X=NULL
+
+
+#Convert Date to date time
+vence_df$date=as.POSIXct(vence_df$date)
+
+#sort data by date time
+vence_df = vence_df[order(vence_df$date), ] 
+
+ID=unique(vence_df$collar_id)
+
+vence_df=subset (vence_df,latitude < 90|latitude > -90)
+vence_df=subset (vence_df,longitude<180&longitude > -180 )
+#create column with just date
+vence_df$Date=as.Date(vence_df$date)
+#identify the first occurance for flag collar off column
+flags=unique(vence_df$Flag_Collar_Off)
+if("Flag" %in% flags){
+  flag.first <- vence_df[match(unique(vence_df$Flag_Collar_Off), vence_df$Flag_Collar_Off),]
+  #remove all data after the date when the collar fell off
+  vence_df=subset(vence_df, Date< flag.first$Date[2] )
+}
+
+  
+if (length(unique(vence_df$trackingState))>1){
+  
+  
+  sound_df= subset(vence_df,trackingState=="SOUND_REGION")
+  sound=aggregate(sound_df$soundCount,by=list(sound_df$Date),FUN=sum)
+  colnames(sound)=c("Date",'Sound_Count')
+  shock=aggregate(sound_df$shockCount,by=list(sound_df$Date),FUN=sum)
+  colnames(shock)=c("Date",'Shock_Count')
+  sound_region=merge(sound,shock)
+  sound_region$Tracking_State='Sound_Region'
+  
+  
+  shock_df=subset(vence_df,trackingState=="SHOCK_REGION")
+  sound=aggregate(shock_df$soundCount,by=list(shock_df$Date),FUN=sum)
+  colnames(sound)=c("Date",'Sound_Count')
+  shock=aggregate(shock_df$shockCount,by=list(shock_df$Date),FUN=sum)
+  colnames(shock)=c("Date",'Shock_Count')
+  shock_region=merge(sound,shock)
+  shock_region$Tracking_State='Shock_Region'
+  stimuli_df=rbind(sound_region,shock_region)
+  stimuli_df$Total=stimuli_df$Sound_Count+stimuli_df$Shock_Count
+  stimuli_df$Percent_Sound =stimuli_df$Sound_Count/stimuli_df$Total
+  
+}else{
+  
+  stimuli_df=data.frame(NA,NA,NA,NA,NA,NA)
+  colnames(stimuli_df)=c( "Date" ,"Sound_Count" ,"Shock_Count","Tracking_State", "Total","Percent_Sound" )
+  
+}
+stimuli_df$collar_id=ID
+
+stimuli_df_blank=rbind(stimuli_df_blank,stimuli_df)
+
+}
+  
+
+
+stimuli_df_blank
+
+```
+
+
+
+
+From the output we created we can plot the number of sound/shock stimuli by day and animal to see if there are some animals in the group recieving more stimuli. 
+
+```{r,  class.source="bg-success" }
+ggplot(stimuli_df_blank,aes(x=Date,y=Sound_Count,color=Tracking_State))+
+  geom_point()+
+  facet_wrap(~collar_id)+
+  ylab("Sound Count")
+
+```
+
+
+In addition, we can now calculate the average percent of stimuli that are sound events. For this group of animals, 92% of stimuli were sound.
+
+```{r,  class.source="bg-success" }
+mean(stimuli_df_blank$Percent_Sound,na.rm = T)
+```
+
+## Add loop for all steps
+
+As we did above we can create a loop for all calculating all steps: daily behavior,daily distance traveled, fix interval and output them into unique dataframes. Below we will create four blank datasets.
+```{r, class.source="bg-success"}
+behavior_blank=data.frame()
+daily_distance_traveled_blank=data.frame()
+fix_interval_df_blank=data.frame()
+
+```
+
+## Loop through records
+
+The code below is compiled from all the steps above. We will use a loop to then go through each of our individual collar files, process the data the same, calculate daily metrics as above, and populate our empty dataframes. In this way, we can steamline the processing steps to more efficiently process each individual dataset. 
+
+```{r,  class.source="bg-success" }
+
+
+for(i in 1:length(filenames)){
+
+vence_df=read.csv(filenames[i],header=T)
+vence_df$X=NULL
+
+
+#Convert Date to date time
+vence_df$date=as.POSIXct(vence_df$date)
+
+#sort data by date time
+vence_df = vence_df[order(vence_df$date), ] 
+
+ID=unique(vence_df$collar_id)
+
+vence_df=subset (vence_df,latitude < 90|latitude > -90)
+vence_df=subset (vence_df,longitude<180&longitude > -180 )
+#create column with just date
+vence_df$Date=as.Date(vence_df$date)
+#identify the first occurance for flag collar off column
+flags=unique(vence_df$Flag_Collar_Off)
+if("Flag" %in% flags){
+  flag.first <- vence_df[match(unique(vence_df$Flag_Collar_Off), vence_df$Flag_Collar_Off),]
+  #remove all data after the date when the collar fell off
+  vence_df=subset(vence_df, Date< flag.first$Date[2] )
+}
+
+
+#create dataframe of longitude and latitude utm points
+pts <- vence_df[c("longitude_utm" , "latitude_utm" )] 
+p1 = pts[-nrow(pts),]
+p2 = pts[-1,]
+#plug points into formula for euclidian distance (m), add in zero for first record
+vence_df$Distance=c(0, sqrt((p1$latitude_utm-p2$latitude_utm)^2 +(p1$longitude_utm-p2$longitude_utm)^2))
+
+#calculate difference in time between successive fixes
+time_diff = as.numeric(difftime(vence_df$date[1:(length(vence_df$date)-1)] , vence_df$date[2:length(vence_df$date)],units = c("min"))*-1)
+vence_df$Duration=c(0,time_diff) #add in duration column, notice first record is 0
+
+#calculate rate of travel
+vence_df$Rate=vence_df$Distance/vence_df$Duration #calculate rate
+
+animal_id=read.csv('Animal_ID.csv')
+vence_df=merge(vence_df,animal_id,by='collar_id')
+
+rotation_df=read.csv('Rotation_Information.csv')
+rotation_df$Start=as.Date(rotation_df$Start,format = '%m/%d/%Y')
+rotation_df$End=as.Date(rotation_df$End,format = '%m/%d/%Y')
+
+
+vence_df<- merge(vence_df, rotation_df, by = "Pasture")
+
+vence_df$Eval=ifelse(vence_df$Date>=vence_df$Start&vence_df$Date<=vence_df$End,T,F)
+
+
+
+vence_df=subset(vence_df,Eval==T)
+
+vence_df$behavior <-ifelse(vence_df$Rate < 2.34 , "Resting",
+                           ifelse(vence_df$Rate >= 2.341 & vence_df$Rate <=25.0, "Grazing",
+                                  "Walking"))
+
+behavior_df=aggregate(vence_df$Duration,by=list(vence_df$Date,vence_df$behavior),FUN=sum)
+colnames(behavior_df)=c('Date','Behavior','Minutes')
+behavior_df$collar_id=ID
+behavior_blank=rbind(behavior_blank,behavior_df)
+
+
+###########################################################################
+daily_distance_traveled=aggregate(vence_df$Distance,by=list(vence_df$Date),FUN=sum)
+colnames(daily_distance_traveled)=c("Date", "Distance_m")
+daily_distance_traveled$collar_id=ID
+daily_distance_traveled_blank=rbind(daily_distance_traveled_blank,daily_distance_traveled)
+#############################################################################
+
+
+#get average fix interval
+avg_fix_interval=round( mean(vence_df$Duration),digits=1)
+#get maximum fix intrval
+max_fix_interval=round( max(vence_df$Duration),digits=1)
+#get number of intervals greater than twice the total fixes and percent of total dropped
+df_fix_drop= subset(vence_df,Duration>avg_fix_interval*2)
+dropped_fixes=length(df_fix_drop$Duration)
+total_fixes=length(vence_df$Duration)
+percent_dropped=round( dropped_fixes/length(vence_df$Duration)*100,digits = 1)
+#turn into dataframe
+fix_interval_df=data.frame(avg_fix_interval,max_fix_interval,dropped_fixes,total_fixes,percent_dropped)
+fix_interval_df$collar_id=ID
+
+fix_interval_df_blank=rbind(fix_interval_df_blank,fix_interval_df)
+
+
+}
+
+```
+
+
+## Data frames
+
+We have now created four dataframes with information from each collar. Below is the print out of the fix interval information for each collar.
+
+```{r,  class.source="bg-success" }
+kable(fix_interval_df_blank)
+
+```
+
+Likewise we can plot the combined daily distance traveled data
+```{r,  class.source="bg-success" }
+ggplot(daily_distance_traveled_blank,aes(x=Date,y=Distance_m,color=collar_id))+
+  geom_line()
+
+```
+
+
+
+## Conclusion
+
+Though these are simple examples for calculating some basic daily metrics for individual animals using virtual fence data, it will hopefully serve as a template to start piecing together your analysis for your own data. 
+
+
+
+
+
+
