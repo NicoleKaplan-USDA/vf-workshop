@@ -44,9 +44,9 @@ Open the [Google Collab](https://colab.research.google.com/github/amantaya/vf-wo
 
 You will be prompted to grant permission for the Google Collab notebook to access all files on your Google Drive.
 
-![Allow Access to Google Drive Prompt](docs/attachments/allow-access-to-google-drive.jpg)
+**Do not  use a Google Drive that contains sensitive or personal data**, as this grants full access to all of the files in your Google Drive (see image below). You can always create another free Google account to run this analysis to avoid granting access to your personal Google Drive files. 
 
-It's a best security practice to **do not  use a Google Drive that contains sensitive or personal data**, as this grants full access to all of the files in your Google Drive (see image below).
+![Allow Access to Google Drive Prompt](docs/attachments/allow-access-to-google-drive.jpg)
 
 ![Permissions for Google Drive](docs/attachments/permission-for-google-drive.jpg)
 
