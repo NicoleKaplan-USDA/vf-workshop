@@ -37,3 +37,7 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+
+# Pycharm Config Files
+/.idea/
+/code/.ipynb_checkpoints/VF_In_Service_Vence_API-checkpoint.ipynb
