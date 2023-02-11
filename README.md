@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-A Google Account
+Google Account with access to Google Drive and Google Collab
 
 ## Setup
 
@@ -28,7 +28,7 @@ We recommend that you download this GitHub repository as a zip (compressed) fold
 
 ## Accessing Virtual Fence Message Data with the API
 
-APIs allow you create, read, update, and delete data from another computer or server.
+APIs allow you to create, read, update, and delete data from another computer or server.
 
 In our specific case, we can only read data from a server. The API controls access to virtual fence data through authentication. We need to supply the API with a username and password to retrieve data.
 
@@ -36,13 +36,13 @@ In our specific case, we can only read data from a server. The API controls acce
 
 ### Retrieving Virtual Fence Message Data Through the API
 
-We will be retrieving virtual fence message data by running a Python script to ask for messages over a range of dates.
+We have set up a Google Collab Notebook for this workshop. Google Collab is a free service that runs Jupyter Notebooks (which are similar to R Markdown notebooks) in the cloud. This means that you run Python in the cloud, not on your local computer. This has several advantages, including not tying up your computer's resources (CPU/Memory) to run a script, and in our case, you don't have to download packages/libraries to your local computer (making workshop setup much easier!).
 
-We have setup a Google Collab Notebook for this workshop. Google Collab is a free service that runs Jupyter Notebooks (which are similar to R Markdown Notebooks) in the cloud. This means that you run Python in the cloud, not on your local computer. This has several advantages, including not tying up your computer's resources (CPU/Memory) to run a script, and in our case, you don't have to download packages/libraries to your local computer (making workshop setup much easier!).
-
-Open the [Google Collab](https://colab.research.google.com/github/amantaya/vf-workshop/blob/main/code/VF_In_Service_Vence_API.ipynb) notebook. You may be prompted to sign into your Google account.
+Open the [Google Collab](https://colab.research.google.com/github/amantaya/vf-workshop/blob/main/code/VF_In_Service_Vence_API.ipynb) notebook. You may be prompted to sign in to your Google account, if not already signed in.
 
 You will be prompted to grant permission for the Google Collab notebook to access all files on your Google Drive.
+
+**Note: You need to be logged into the same Google account that you are mounting the Google Drive to. If you are using Google Chrome as your web browser, make sure you are logged into Chrome with the same Google account that you will be using to store data on your Google Drive.**
 
 **Do not  use a Google Drive that contains sensitive or personal data**, as this grants full access to all of the files in your Google Drive (see image below). You can always create another free Google account to run this analysis to avoid granting access to your personal Google Drive files. 
 
