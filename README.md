@@ -24,6 +24,9 @@ We recommend that you download this GitHub repository as a zip (compressed) fold
 4. [Virtual Fence Wrangling](https://github.com/Brandkmayer/VenceVFWrangling)
 5. [Vence-API](https://github.com/amantaya/Vence-API)
 
+## Shameless Plug
+
+[grazeR](https://github.com/amantaya/grazeR) R package for grazing studies (in development).
 
 ## Understanding Virtual Fence Message Data
 
