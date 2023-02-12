@@ -27,7 +27,7 @@ We recommend that you download this GitHub repository as a zip (compressed) fold
 
 ## Understanding Virtual Fence Message Data
 
-https://docs.google.com/document/d/1mSkW57wWF59D9fOm_tbnTVByqaYR4UnV/edit
+[Vence Data Definitions V2](https://docs.google.com/document/d/1mSkW57wWF59D9fOm_tbnTVByqaYR4UnV/edit)
 
 ## Accessing Virtual Fence Message Data with the API
 
