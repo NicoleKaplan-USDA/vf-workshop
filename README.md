@@ -9,7 +9,8 @@ Google Account with access to Google Drive and Google Collab
 1. Install R (we're using version 4.2.2)
 2. Install R Studio (we're using version 2022.12.0 Build 353)
 3. Setup Google Collab and Google Drive
-4. [Optional] Install Anaconda for Python
+4. [Optional] Install [Anaconda](https://www.anaconda.com/products/distribution) for Python
+5. [Optional] [SQLite Studio](https://sqlitestudio.pl/)
 
 
 We recommend that you download this GitHub repository as a zip (compressed) folder during the workshop. Click on the green "Code" button and select "Download ZIP"  to download a local copy.
