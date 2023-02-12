@@ -11,6 +11,7 @@ Google Account with access to Google Drive and Google Collab
 3. Setup Google Collab and Google Drive
 4. [Optional] Install Anaconda for Python
 
+
 We recommend that you download this GitHub repository as a zip (compressed) folder during the workshop. Click on the green "Code" button and select "Download ZIP"  to download a local copy.
 
 ![](docs/attachments/download-repo-as-zip-folder.jpg)
@@ -21,10 +22,12 @@ We recommend that you download this GitHub repository as a zip (compressed) fold
 2. [HackMD (for live coding assistance)](https://hackmd.io/@yW3saP0JQS-tB5uNp9cJ-Q/Hk7YL6Uhs/edit)
 3. [Google Collab](https://colab.research.google.com/github/amantaya/vf-workshop/blob/main/code/VF_In_Service_Vence_API.ipynb)
 4. [Virtual Fence Wrangling](https://github.com/Brandkmayer/VenceVFWrangling)
+5. [Vence-API](https://github.com/amantaya/Vence-API)
+
 
 ## Understanding Virtual Fence Message Data
 
-(Nathan will add stuff here)
+
 
 ## Accessing Virtual Fence Message Data with the API
 
@@ -53,5 +56,7 @@ You will be prompted to grant permission for the Google Collab notebook to acces
 ## Managing Virtual Fence Message Data with a Database
 
 ## Creating Virtual Fences in R
+
+[VenceVFWrangling](https://github.com/Brandkmayer/VenceVFWrangling)
 
 ## Turning Virtual Fences Message Data into DataFrames in R
