@@ -20,9 +20,7 @@ DBI::dbListTables(database_connection)
 # Read in Message Data ----------------------------------------------------
 
 # load message data (downloaded from the API)
-message_data <- readr::read_csv(file.path("data",
-                          "messages",
-                          "2022-12-01_2022-12-31_Vence-message-data.csv"))
+message_data <- readr::read_csv(file.path("database-design", "example-data.csv"))
 
 # Rename 'index' column to 'row_id' ---------------------------------------
 
