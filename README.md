@@ -11,7 +11,6 @@ Google Account with access to Google Drive and Google Collab
 3. [Optional] Install [Anaconda](https://www.anaconda.com/products/distribution) for Python
 4. [Optional] [SQLite Studio](https://sqlitestudio.pl/)
 
-
 We recommend that you download this GitHub repository as a zip (compressed) folder during the workshop. Click on the green "Code" button and select "Download ZIP"  to download a local copy.
 
 ![](docs/attachments/download-repo-as-zip-folder.jpg)
@@ -61,5 +60,7 @@ You will be prompted to grant permission for the Google Collab notebook to acces
 ## Creating Virtual Fences in R
 
 [VenceVFWrangling](https://github.com/Brandkmayer/VenceVFWrangling)
+
+**Note: There is currently a bug on HerdManager where the points associated with virtual fences do not display properly on HerdManager. Engineers at Vence are aware of the issue and a fix is in the works.**
 
 ## Turning Virtual Fences Message Data into DataFrames in R
