@@ -1,6 +1,6 @@
 # Virtual Fence Data Workshop
 
-This work is supported by the Agricultural Genome to Phenome Initiative AG2PI (USDA-NIFA award 2021-70412-35233).
+This work is supported by the Agricultural Genome to Phenome Initiative AG2PI (*USDA-NIFA award 2021-70412-35233*).
 
 ## Prerequisites
 
