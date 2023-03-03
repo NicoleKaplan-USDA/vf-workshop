@@ -1,8 +1,10 @@
 # Virtual Fence Data Workshop
 
+This work is supported by the Agricultural Genome to Phenome Initiative AG2PI (USDA-NIFA award 2021-70412-35233).
+
 ## Prerequisites
 
-Google Account with access to Google Drive and Google Collab
+Google Account with access to Google Drive and Google Collab.
 
 ## Setup
 
@@ -49,7 +51,7 @@ You will be prompted to grant permission for the Google Collab notebook to acces
 
 **Note: You need to be logged into the same Google account that you are mounting the Google Drive to. If you are using Google Chrome as your web browser, make sure you are logged into Chrome with the same Google account that you will be using to store data on your Google Drive.**
 
-**Do not  use a Google Drive that contains sensitive or personal data**, as this grants full access to all of the files in your Google Drive (see image below). You can always create another free Google account to run this analysis to avoid granting access to your personal Google Drive files. 
+**Do not  use a Google Drive that contains sensitive or personal data**, as this grants full access to all of the files in your Google Drive (see image below). You can always create another free Google account to run this analysis to avoid granting access to your personal Google Drive files.
 
 ![Allow Access to Google Drive Prompt](docs/attachments/allow-access-to-google-drive.jpg)
 
