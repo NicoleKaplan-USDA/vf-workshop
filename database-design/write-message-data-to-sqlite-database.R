@@ -9,8 +9,8 @@ library("dplyr")
 # Connect to SQLite Database ----------------------------------------------
 
 # Create sqlite database in your working directory if it doesn't already exist
-database_connection <- DBI::dbConnect(RSQLite::SQLite(), 
-                                      "vf_development_database.db")
+database_connection <- DBI::dbConnect(RSQLite::SQLite(),
+                                        file.path("database-design", "vf_development_database.db"))
 
 # Read Empty Tables in SQLite Database ------------------------------------
 

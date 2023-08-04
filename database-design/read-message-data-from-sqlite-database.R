@@ -3,7 +3,7 @@ rm(list = ls())
 
 # connect to the SQLite database
 database_connection <- DBI::dbConnect(RSQLite::SQLite(), 
-                                      "vf_development_database.db")
+                                      file.path("database-design", "vf_development_database.db"))
 
 # read in data from the messages table
 message_data <- DBI::dbReadTable(database_connection, "messages")

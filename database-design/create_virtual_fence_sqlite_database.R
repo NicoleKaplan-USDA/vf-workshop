@@ -2,12 +2,13 @@
 
 # attach the R package to interface with the SQLite database
 library("RSQLite")
+library("DBI")
 
 # Connect to SQLite Database ----------------------------------------------
 
 # Create sqlite database in your working directory if it doesn't already exist
 database_connection <- DBI::dbConnect(RSQLite::SQLite(),
-                                      "vf_development_database.db")
+                                      file.path("database-design", "vf_development_database.db"))
 
 # Create the `active_dates` Table -----------------------------------------
 
