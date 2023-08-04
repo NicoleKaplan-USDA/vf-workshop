@@ -19,6 +19,7 @@
 
 # RStudio files
 .Rproj.user/
+/vf-workshop.Rproj
 
 # produced vignettes
 vignettes/*.html
@@ -41,3 +42,4 @@ vignettes/*.pdf
 # Pycharm Config Files
 /.idea/
 /code/.ipynb_checkpoints/VF_In_Service_Vence_API-checkpoint.ipynb
+
