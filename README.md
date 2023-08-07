@@ -1,5 +1,9 @@
 # Virtual Fence Data Workshop
 
+<a target="_blank" href="https://colab.research.google.com/github/https://colab.research.google.com/github/amantaya/vf-workshop/blob/main/code/VF_In_Service_Vence_API.ipynb">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
+</a>
+
 This work is supported by the Agricultural Genome to Phenome Initiative AG2PI (*USDA-NIFA award 2021-70412-35233*).
 
 ## Important Links
