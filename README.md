@@ -2,6 +2,14 @@
 
 This work is supported by the Agricultural Genome to Phenome Initiative AG2PI (*USDA-NIFA award 2021-70412-35233*).
 
+## Important Links
+
+1. [Workshop Code](https://github.com/amantaya/vf-workshop/tree/main/code)
+2. [HackMD (for live coding assistance)](https://hackmd.io/@yW3saP0JQS-tB5uNp9cJ-Q/Hk7YL6Uhs/edit)
+3. [Google Collab](https://colab.research.google.com/github/amantaya/vf-workshop/blob/main/code/VF_In_Service_Vence_API.ipynb)
+4. [Virtual Fence Wrangling](https://github.com/Brandkmayer/VenceVFWrangling)
+5. [Vence-API](https://github.com/amantaya/Vence-API)
+
 ## Prerequisites
 
 Google Account with access to Google Drive and Google Collab.
@@ -16,14 +24,6 @@ Google Account with access to Google Drive and Google Collab.
 We recommend that you download this GitHub repository as a zip (compressed) folder during the workshop. Click on the green "Code" button and select "Download ZIP"  to download a local copy.
 
 ![](docs/attachments/download-repo-as-zip-folder.jpg)
-
-## Important Links
-
-1. [Workshop Code](https://github.com/amantaya/vf-workshop/tree/main/code)
-2. [HackMD (for live coding assistance)](https://hackmd.io/@yW3saP0JQS-tB5uNp9cJ-Q/Hk7YL6Uhs/edit)
-3. [Google Collab](https://colab.research.google.com/github/amantaya/vf-workshop/blob/main/code/VF_In_Service_Vence_API.ipynb)
-4. [Virtual Fence Wrangling](https://github.com/Brandkmayer/VenceVFWrangling)
-5. [Vence-API](https://github.com/amantaya/Vence-API)
 
 ## Shameless Plug
 
