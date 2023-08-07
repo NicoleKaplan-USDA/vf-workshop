@@ -10,7 +10,7 @@ This work is supported by the Agricultural Genome to Phenome Initiative AG2PI (*
 
 1. [Workshop Code](https://github.com/amantaya/vf-workshop/tree/main/code)
 2. [HackMD (for live coding assistance)](https://hackmd.io/@yW3saP0JQS-tB5uNp9cJ-Q/Hk7YL6Uhs/edit)
-3. [Google Collab](https://colab.research.google.com/github/amantaya/vf-workshop/blob/main/code/VF_In_Service_Vence_API.ipynb)
+3. [Google Colab](https://colab.research.google.com/github/amantaya/vf-workshop/blob/main/code/VF_In_Service_Vence_API.ipynb)
 4. [Virtual Fence Wrangling](https://github.com/Brandkmayer/VenceVFWrangling)
 5. [Vence-API](https://github.com/amantaya/Vence-API)
 
@@ -49,7 +49,7 @@ In our specific case, we can only read data from a server. The API controls acce
 
 We have set up a Google Collab Notebook for this workshop. Google Collab is a free service that runs Jupyter Notebooks (which are similar to R Markdown notebooks) in the cloud. This means that you run Python in the cloud, not on your local computer. This has several advantages, including not tying up your computer's resources (CPU/Memory) to run a script, and in our case, you don't have to download packages/libraries to your local computer (making workshop setup much easier!).
 
-Open the [Google Collab](https://colab.research.google.com/github/amantaya/vf-workshop/blob/main/code/VF_In_Service_Vence_API.ipynb) notebook. You may be prompted to sign in to your Google account, if not already signed in.
+Open the [Google Colab](https://colab.research.google.com/github/amantaya/vf-workshop/blob/main/code/VF_In_Service_Vence_API.ipynb) notebook. You may be prompted to sign in to your Google account, if not already signed in.
 
 You will be prompted to grant permission for the Google Collab notebook to access all files on your Google Drive.
 
