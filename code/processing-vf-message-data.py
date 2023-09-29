@@ -287,12 +287,12 @@ def process_vf_data(df):
       out_df['date']=time_convert #convert to local
       out_df['date']=pd.to_datetime(out_df['date']) #convert to date
       #convert lat/long to utm
-      Lat=out_df['latitude']
-      Long=out_df['longitude']
+      Latitude=out_df['latitude'] #changed
+      Longitude=out_df['longitude'] #changed
       Lat_utm=[]
       Long_utm=[]
       for f in range(0,len(Lat)):
-          out=utm.from_latlon(Lat.iloc[f],Long.iloc[f])
+          out=utm.from_latlon(Latitude.iloc[f],Longitude.iloc[f]) #changed
           #print (out)
           Lat_utm.append(out[0])
           Long_utm.append(out[1])
