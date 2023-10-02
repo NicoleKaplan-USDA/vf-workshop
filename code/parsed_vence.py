@@ -1,7 +1,7 @@
 def parsed_vence(df):
-  df1=df[df.latitude.str.contains("NA") == False]
+  df1=df[df.Latitude.str.contains("NA") == False]
   #store NA latitude values
-  df_na_coordinates=df[df.latitude.str.contains("NA") == True]
+  df_na_coordinates=df[df.Latitude.str.contains("NA") == True]
 #get unique collar id as last 4 characters in mac address
   df1['collar_id']= df1['collar'].str[-4:]
   #create list of unique collars
@@ -15,8 +15,8 @@ def parsed_vence(df):
 
       #subset out data based on collar id number in loop
       out_df = df1[df1["collar_id"] ==collars[i]]
-      out_df['latitude']= pd.to_numeric(out_df['latitude']) #convert lat to number
-      out_df['longitude']= pd.to_numeric(out_df['longitude']) #convert long to number
+      out_df['Latitude']= pd.to_numeric(out_df['Latitude']) #convert lat to number
+      out_df['Longitude']= pd.to_numeric(out_df['Longitude']) #convert long to number
       out_df['date']=pd.to_datetime(out_df['date'],utc=True)  #convert date to date UTC
       out_df = out_df.sort_values([ "date"], ascending = ( True)) #sort by date
       out_df ['Duration']=out_df ['date']-out_df ['date'].shift(1) #calculate duration between successive fixes
@@ -28,7 +28,7 @@ def parsed_vence(df):
       time_convert=[]
       #loop through each lat long and get the local timezone for each point and make list of converted date/time
       for time_z in range(0,len(out_df)):
-          tz=tf.timezone_at(lng=out_df.longitude.iloc[time_z], lat=out_df.latitude.iloc[time_z])
+          tz=tf.timezone_at(lng=out_df.Longitude.iloc[time_z], lat=out_df.Latitude.iloc[time_z])
           my_date_time=out_df.date.iloc[time_z]
           convert_time= my_date_time.astimezone(pytz.timezone(tz)).strftime('%Y-%m-%d %H:%M:%S %Z%z')
           #   print (tz)
@@ -39,8 +39,8 @@ def parsed_vence(df):
       out_df['date']=time_convert #convert to local
       out_df['date']=pd.to_datetime(out_df['date']) #convert to date
       #convert lat/long to utm
-      Latitude=out_df['latitude'] #changed
-      Longitude=out_df['longitude'] #changed
+      Latitude=out_df['Latitude'] #changed
+      Longitude=out_df['Longitude'] #changed
       Lat_utm=[]
       Long_utm=[]
       for f in range(0,len(Lat)):
@@ -48,10 +48,10 @@ def parsed_vence(df):
           #print (out)
           Lat_utm.append(out[0])
           Long_utm.append(out[1])
-      out_df['latitude_utm']=Lat_utm
-      out_df['longitude_utm']=Long_utm
-      Lat_Long=pd.DataFrame({'Lat': out_df['latitude_utm'],
-         'Long': out_df['longitude_utm'],})
+      out_df['Latitude_utm']=Lat_utm
+      out_df['Longitude_utm']=Long_utm
+      Lat_Long=pd.DataFrame({'Lat': out_df['Latitude_utm'],
+         'Long': out_df['Longitude_utm'],})
       #create kd tree to get number of points within 30m +- 20 points form each
       counts=[]
       count_sum=[]
