@@ -1,7 +1,7 @@
 def parsed_vence(df):
-  df1=df[df.Latitude.str.contains("NA") == False]
+ #df1=df[df.Latitude.str.contains("NA") == False]
   #store NA latitude values
-  df_na_coordinates=df[df.Latitude.str.contains("NA") == True]
+  #df_na_coordinates=df[df.Latitude.str.contains("NA") == True]
 #get unique collar id as last 4 characters in mac address
   df1['collar_id']= df1['collar'].str[-4:]
   #create list of unique collars
