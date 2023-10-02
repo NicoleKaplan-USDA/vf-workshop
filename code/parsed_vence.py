@@ -4,15 +4,16 @@ def process_vf_data(df):
   import re
   import warnings
   import requests
-  from requests.structures import CaseInsensitiveDict
+  from requests.structures 
+  import CaseInsensitiveDict
   import datetime
   import pandas as pd
   import json
   import numpy as np
   import pytz
   import utm
-  #import utm
-  from shapely.geometry import Point
+  from shapely.geometry 
+  import Point
   from geopandas import GeoDataFrame
   df1=df[df.latitude.str.contains("NA") == False]
   #store NA latitude values
