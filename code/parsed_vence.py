@@ -151,7 +151,7 @@ def process_vf_data(df):
       df_pts['date']=df_pts['date'].astype(str)
       gdf = GeoDataFrame(df_pts, crs="EPSG:4326", geometry=geometry)
 
-return(gdf)
+      return(gdf)
 
       #gdf.to_file(out_shp)
 
