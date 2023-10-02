@@ -15,8 +15,8 @@ def parsed_vence(df):
 
       #subset out data based on collar id number in loop
       out_df = df1[df1["collar_id"] ==collars[i]]
-      out_df['Latitude']= pd.to_numeric(out_df['Latitude']) #convert lat to number
-      out_df['Longitude']= pd.to_numeric(out_df['Longitude']) #convert long to number
+      #out_df['Latitude']= pd.to_numeric(out_df['Latitude']) #convert lat to number
+      #out_df['Longitude']= pd.to_numeric(out_df['Longitude']) #convert long to number
       out_df['date']=pd.to_datetime(out_df['date'],utc=True)  #convert date to date UTC
       out_df = out_df.sort_values([ "date"], ascending = ( True)) #sort by date
       out_df ['Duration']=out_df ['date']-out_df ['date'].shift(1) #calculate duration between successive fixes
@@ -39,13 +39,13 @@ def parsed_vence(df):
       out_df['date']=time_convert #convert to local
       out_df['date']=pd.to_datetime(out_df['date']) #convert to date
       #convert lat/long to utm
-      Latitude=out_df['Latitude'] #changed
-      Longitude=out_df['Longitude'] #changed
+      #Latitude=out_df['Latitude'] #changed
+      #Longitude=out_df['Longitude'] #changed
       Lat_utm=[]
       Long_utm=[]
       for f in range(0,len(Lat)):
           out=utm.from_latlon(Latitude.iloc[f],Longitude.iloc[f]) #changed
-          #print (out)
+          print (out)
           Lat_utm.append(out[0])
           Long_utm.append(out[1])
       out_df['Latitude_utm']=Lat_utm
