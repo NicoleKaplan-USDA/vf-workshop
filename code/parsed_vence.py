@@ -102,7 +102,7 @@ def parsed_vence(df):
 
 
       #calculate euclidean distance
-      out_df['Distance']= np.sqrt ((out_df['latitude_utm'].shift(1)-out_df['latitude_utm'])**2 + (out_df['longitude_utm'].shift(1) - out_df['longitude_utm'])**2)
+      out_df['Distance']= np.sqrt ((out_df['Latitude_utm'].shift(1)-out_df['Latitude_utm'])**2 + (out_df['Longitude_utm'].shift(1) - out_df['Longitude_utm'])**2)
 
       out_df['Rate'] =out_df['Distance']/out_df['Duration']
       #remove points with rate of travel greater than 54m/min
@@ -110,7 +110,7 @@ def parsed_vence(df):
       #out_df=out_df[out_df.Rate<54]
 
       #re_calculate after dropping fixes
-      out_df['Distance']= np.sqrt ((out_df['latitude_utm'].shift(1)-out_df['latitude_utm'])**2 + (out_df['longitude_utm'].shift(1) - out_df['longitude_utm'])**2)
+      out_df['Distance']= np.sqrt ((out_df['Latitude_utm'].shift(1)-out_df['Latitude_utm'])**2 + (out_df['Longitude_utm'].shift(1) - out_df['Longitude_utm'])**2)
       out_df ['Duration']=out_df ['date']-out_df ['date'].shift(1)
       out_df['Duration']=out_df['Duration']/np.timedelta64(1, 's')/60
       out_df['Rate'] =out_df['Distance']/out_df['Duration']
@@ -130,8 +130,8 @@ def parsed_vence(df):
 
 
       out_df.to_csv(out_csv)
-      geometry = [Point(xy) for xy in zip(out_df.longitude,out_df.latitude)]
-      df_pts = out_df.drop(['longitude', 'latitude'], axis=1)
+      geometry = [Point(xy) for xy in zip(out_df.Longitude,out_df.Latitude)]
+      df_pts = out_df.drop(['Longitude', 'Latitude'], axis=1)
       df_pts['date']=df_pts['date'].astype(str)
       gdf = GeoDataFrame(df_pts, crs="EPSG:4326", geometry=geometry)
 
