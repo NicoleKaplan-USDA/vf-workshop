@@ -1,18 +1,4 @@
 def parsed_vence(df):
-  import os
-  import sys
-  import re
-  import warnings
-  import requests 
-  import CaseInsensitiveDict
-  import datetime
-  import pandas as pd
-  import json
-  import numpy as np
-  import pytz
-  import utm 
-  import Point
-  import GeoDataFrame
   df1=df[df.latitude.str.contains("NA") == False]
   #store NA latitude values
   df_na_coordinates=df[df.latitude.str.contains("NA") == True]
