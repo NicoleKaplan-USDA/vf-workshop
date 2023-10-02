@@ -1,3 +1,4 @@
+##FUNCTION PULLED APART AND COPIED INTO JUPYTER NOTE BOOK FOR CLOSE EXAMINATION, SO must be updated or notebook uploaded to GitHub
 def parsed_vence(df):
  #df1=df[df.Latitude.str.contains("NA") == False]
   #store NA latitude values
@@ -38,13 +39,15 @@ def parsed_vence(df):
       out_df['Time_Zone']=time_zone #create column for time zone
       out_df['date']=time_convert #convert to local
       out_df['date']=pd.to_datetime(out_df['date']) #convert to date
+
+
       #convert lat/long to utm
-      #Latitude=out_df['Latitude'] #changed
-      #Longitude=out_df['Longitude'] #changed
+      Lat=out_df['Latitude'] #changed
+      Long=out_df['Longitude'] #changed
       Lat_utm=[]
       Long_utm=[]
       for f in range(0,len(Lat)):
-          out=utm.from_latlon(Latitude.iloc[f],Longitude.iloc[f]) #changed
+          out=utm.from_latlon(Lat.iloc[f],Long.iloc[f]) #changed
           print (out)
           Lat_utm.append(out[0])
           Long_utm.append(out[1])
