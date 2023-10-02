@@ -1,3 +1,4 @@
+def process_vf_data(df):
 import math
 #from utm.error import OutOfRangeError
 
@@ -231,7 +232,7 @@ def latlon_to_zone_number(latitude, longitude):
 def zone_number_to_central_longitude(zone_number):
     return (zone_number - 1) * 6 - 180 + 3
 
-def process_vf_data(df):
+#def process_vf_data(df):
   import os
   import sys
   import re
@@ -383,8 +384,8 @@ def process_vf_data(df):
       df_pts['date']=df_pts['date'].astype(str)
       gdf = GeoDataFrame(df_pts, crs="EPSG:4326", geometry=geometry)
 
+return(gdf)
 
-
-      gdf.to_file(out_shp)
+      #gdf.to_file(out_shp)
 
 
